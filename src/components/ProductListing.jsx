@@ -56,7 +56,7 @@ const ProductListing = () => {
             </div>
             <div className='flex justify-start items-center w-full'>
               <button 
-                className='bg-[#2358b3] text-white px-4 py-2 rounded-md cursor-pointer w-full hover:bg-teal-700 transition-colors'
+                className='bg-[#2358b3] text-white px-4 py-2 rounded-md cursor-pointer w-full hover:bg-[#2358b3] transition-colors'
                 onClick={(e) => handleAddToCart(e, product)}
               >
                 Add to Cart

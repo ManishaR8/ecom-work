@@ -1,11 +1,19 @@
 'use client'
-import React, { createContext, useContext, useState, useEffect } from 'react'
+import React, { createContext, useContext, useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { fetchProducts, fetchCategories } from '../lib/api'
 
 const StoreContext = createContext()
 
 export const StoreProvider = ({ children }) => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <StoreProviderContent>{children}</StoreProviderContent>
+    </Suspense>
+  )
+}
+
+const StoreProviderContent = ({ children }) => {
   const [products, setProducts] = useState([])
   const [filteredProducts, setFilteredProducts] = useState([])
   const [categories, setCategories] = useState([])
@@ -56,7 +64,7 @@ export const StoreProvider = ({ children }) => {
     if (searchQuery) params.set('search', searchQuery)
         
     router.push(`?${params.toString()}`)
-  }, [selectedCategory, priceRange, searchQuery])
+  }, [selectedCategory, priceRange, searchQuery, router])
 
   useEffect(() => {
     const category = searchParams.get('category')
@@ -68,7 +76,7 @@ export const StoreProvider = ({ children }) => {
     if (minPrice) setPriceRange(prev => ({ ...prev, min: Number(minPrice) }))
     if (maxPrice) setPriceRange(prev => ({ ...prev, max: Number(maxPrice) }))
     if (search) setSearchQuery(search)
-  }, [])
+  }, [searchParams])
 
   useEffect(() => {
     let filtered = [...products]

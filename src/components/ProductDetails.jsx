@@ -94,7 +94,7 @@ const ProductDetails = () => {
         </div>
 
         <button 
-          className="w-full bg-[#2358b3] text-white py-3 rounded-md hover:bg-teal-700 transition-colors cursor-pointer"
+          className="w-full bg-[#2358b3] text-white py-3 rounded-md hover:bg-[#2358b3] transition-colors cursor-pointer"
           onClick={handleAddToCart}
         >
           Add to Cart
