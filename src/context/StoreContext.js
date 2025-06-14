@@ -12,6 +12,7 @@ export const StoreProvider = ({ children }) => {
   const [loading, setLoading] = useState(true)
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [priceRange, setPriceRange] = useState({ min: 0, max: 1000 })
+  const [searchQuery, setSearchQuery] = useState('')
   const searchParams = useSearchParams();
   
   const router = useRouter()
@@ -38,27 +39,28 @@ export const StoreProvider = ({ children }) => {
   useEffect(() => {
     const params = new URLSearchParams()
     if (selectedCategory !== 'all') params.set('category', selectedCategory)
-
     if (priceRange.min > 0) params.set('minPrice', priceRange.min)
     if (priceRange.max < 1000) params.set('maxPrice', priceRange.max)
+    if (searchQuery) params.set('search', searchQuery)
         
-        router.push(`?${params.toString()}`)
-  }, [selectedCategory, priceRange])
+    router.push(`?${params.toString()}`)
+  }, [selectedCategory, priceRange, searchQuery])
 
   useEffect(() => {
     const category = searchParams.get('category')
     const minPrice = searchParams.get('minPrice')
     const maxPrice = searchParams.get('maxPrice')
+    const search = searchParams.get('search')
 
     if (category) setSelectedCategory(category)
     if (minPrice) setPriceRange(prev => ({ ...prev, min: Number(minPrice) }))
     if (maxPrice) setPriceRange(prev => ({ ...prev, max: Number(maxPrice) }))
+    if (search) setSearchQuery(search)
   }, [])
 
   useEffect(() => {
     let filtered = [...products]
    
-
     if (selectedCategory !== 'all') {
       filtered = filtered.filter(product => product.category === selectedCategory)
     }
@@ -67,8 +69,18 @@ export const StoreProvider = ({ children }) => {
       product => product.price >= priceRange.min && product.price <= priceRange.max
     )
 
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase()
+      filtered = filtered.filter(
+        product => 
+          product.title.toLowerCase().includes(query) ||
+          product.description.toLowerCase().includes(query) ||
+          product.category.toLowerCase().includes(query)
+      )
+    }
+
     setFilteredProducts(filtered)
-  }, [products, selectedCategory, priceRange])
+  }, [products, selectedCategory, priceRange, searchQuery])
 
   const value = {
     products: filteredProducts,
@@ -77,7 +89,9 @@ export const StoreProvider = ({ children }) => {
     selectedCategory,
     setSelectedCategory,
     priceRange,
-    setPriceRange
+    setPriceRange,
+    searchQuery,
+    setSearchQuery
   }
 
   return (

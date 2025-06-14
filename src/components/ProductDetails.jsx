@@ -36,7 +36,7 @@ const ProductDetails = () => {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh]">
         <h2 className="text-2xl font-semibold text-gray-800 mb-4">Product not found</h2>
-        <p className="text-gray-600">The product you're looking for doesn't exist or has been removed.</p>
+        <p className="text-gray-600">The product you're looking for doesn't exist.</p>
       </div>
     )
   }
