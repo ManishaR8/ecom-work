@@ -1,6 +1,7 @@
 import React from 'react'
 import ProductDetails from '../../../components/ProductDetails'
 import Header from '../../../components/Header'
+import Footer from '@/components/Footer'
 
 export default function ProductPage() {
   return (
@@ -9,6 +10,7 @@ export default function ProductPage() {
       <div className="max-w-[1480px] mx-auto p-9 px-12 lg:px-16 py-14">
         <ProductDetails />
       </div>
+      <Footer />
     </main>
   )
 }

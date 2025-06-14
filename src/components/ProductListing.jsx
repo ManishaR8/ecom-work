@@ -5,16 +5,21 @@ import { useStore } from '../context/StoreContext'
 
 const ProductListing = () => {
   const router = useRouter()
-  const { products, loading } = useStore()
+  const { products, loading, addToCart } = useStore()
 
   const handleProductClick = (productId) => {
     router.push(`/product/${productId}`)
   }
 
+  const handleAddToCart = (e, product) => {
+    e.stopPropagation()
+    addToCart(product)
+  }
+
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-teal-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#2358b3]"></div>
       </div>
     )
   }
@@ -44,17 +49,15 @@ const ProductListing = () => {
               />
             </div>
             <div className="p-2">
-              <h2 className="text-lg font-semibold text-gray-800 mb-2 line-clamp-2">{product.title}</h2>
+              <h2 className="text-lg font-semibold text-black mb-2 line-clamp-2">{product.title}</h2>
               <div className="flex justify-between items-center">
-                <span className="text-xl font-bold text-teal-600">${product.price}</span>
+                <span className="text-xl font-bold text-black">${product.price}</span>
               </div>
             </div>
             <div className='flex justify-start items-center w-full'>
               <button 
-                className='bg-teal-600 text-white px-4 py-2 rounded-md cursor-pointer w-full'
-                onClick={(e) => {
-                  e.stopPropagation()
-                }}
+                className='bg-[#2358b3] text-white px-4 py-2 rounded-md cursor-pointer w-full hover:bg-teal-700 transition-colors'
+                onClick={(e) => handleAddToCart(e, product)}
               >
                 Add to Cart
               </button>

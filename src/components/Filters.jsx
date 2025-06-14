@@ -38,13 +38,13 @@ const Filters = () => {
     searchQuery
 
   return (
-    <div className='bg-teal-600 p-4 min-w-60 rounded-md text-white gap-y-4 flex flex-col'>
+    <div className='bg-[#2358b3] p-4 min-w-60 rounded-md text-white gap-y-4 flex flex-col'>
       <div className="flex justify-between items-center">
         <h1 className="text-xl font-semibold">Filters</h1>
         {isFilterApplied && (
           <button 
             onClick={clearFilters}
-            className="text-sm text-white hover:text-teal-200 transition-colors cursor-pointer"
+            className="text-sm text-white hover:text-[#859fceee] transition-colors cursor-pointer"
           >
             Clear All
           </button>
@@ -61,7 +61,7 @@ const Filters = () => {
               value="all"
               checked={selectedCategory === 'all'}
               onChange={handleCategoryChange}
-              className="w-4 h-4 accent-teal-600 border-2 border-teal-600 rounded-full"
+              className="w-4 h-4 accent-[#2358b3] border-2 border-[#2358b3] rounded-full"
             />
             <span>All</span>
           </label>
@@ -73,7 +73,7 @@ const Filters = () => {
                 value={category}
                 checked={selectedCategory === category}
                 onChange={handleCategoryChange}
-                className="w-4 h-4 accent-teal-600 border-2 border-teal-600 rounded-full"
+                className="w-4 h-4 accent-[#2358b3] border-2 border-white bg-[#2358b3]rounded-full"
               />
               <span className="capitalize">{category}</span>
             </label>

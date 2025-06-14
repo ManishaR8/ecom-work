@@ -13,9 +13,21 @@ export const StoreProvider = ({ children }) => {
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [priceRange, setPriceRange] = useState({ min: 0, max: 1000 })
   const [searchQuery, setSearchQuery] = useState('')
+  const [cart, setCart] = useState([])
   const searchParams = useSearchParams();
   
   const router = useRouter()
+
+  useEffect(() => {
+    const savedCart = localStorage.getItem('cart')
+    if (savedCart) {
+      setCart(JSON.parse(savedCart))
+    }
+  }, [])
+
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(cart))
+  }, [cart])
 
   useEffect(() => {
     const loadData = async () => {
@@ -82,6 +94,46 @@ export const StoreProvider = ({ children }) => {
     setFilteredProducts(filtered)
   }, [products, selectedCategory, priceRange, searchQuery])
 
+  const addToCart = (product, quantity = 1) => {
+    setCart(prevCart => {
+      const existingItem = prevCart.find(item => item.id === product.id)
+      
+      if (existingItem) {
+        return prevCart.map(item =>
+          item.id === product.id
+            ? { ...item, quantity: item.quantity + quantity }
+            : item
+        )
+      }
+      
+      return [...prevCart, { ...product, quantity }]
+    })
+  }
+
+  const removeFromCart = (productId) => {
+    setCart(prevCart => prevCart.filter(item => item.id !== productId))
+  }
+
+  const updateCartItemQuantity = (productId, quantity) => {
+    if (quantity < 1) return
+    
+    setCart(prevCart =>
+      prevCart.map(item =>
+        item.id === productId
+          ? { ...item, quantity }
+          : item
+      )
+    )
+  }
+
+  const clearCart = () => {
+    setCart([])
+  }
+
+  const getCartTotal = () => {
+    return cart.reduce((total, item) => total + (item.price * item.quantity), 0)
+  }
+
   const value = {
     products: filteredProducts,
     categories,
@@ -91,7 +143,13 @@ export const StoreProvider = ({ children }) => {
     priceRange,
     setPriceRange,
     searchQuery,
-    setSearchQuery
+    setSearchQuery,
+    cart,
+    addToCart,
+    removeFromCart,
+    updateCartItemQuantity,
+    clearCart,
+    getCartTotal
   }
 
   return (
