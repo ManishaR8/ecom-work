@@ -6,7 +6,7 @@ export default function ProductPage() {
   return (
     <main className="min-h-screen bg-gray-50">
       <Header />
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="max-w-[1480px] mx-auto p-9 px-12 lg:px-16 py-14">
         <ProductDetails />
       </div>
     </main>
