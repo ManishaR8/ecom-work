@@ -62,8 +62,13 @@ const StoreProviderContent = ({ children }) => {
     if (priceRange.min > 0) params.set('minPrice', priceRange.min)
     if (priceRange.max < 1000) params.set('maxPrice', priceRange.max)
     if (searchQuery) params.set('search', searchQuery)
-        
-    router.push(`?${params.toString()}`)
+    
+    const currentPath = window.location.pathname
+    if (currentPath === '/' || currentPath === '') {
+      router.push(`?${params.toString()}`)
+    } else if (searchQuery) {
+      router.push(`/?${params.toString()}`)
+    }
   }, [selectedCategory, priceRange, searchQuery, router])
 
   useEffect(() => {
