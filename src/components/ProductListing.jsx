@@ -1,39 +1,67 @@
 'use client'
 import React from 'react'
+import { useRouter } from 'next/navigation'
+import { useStore } from '../context/StoreContext'
 
 const ProductListing = () => {
+  const router = useRouter()
+  const { products, loading } = useStore()
+
+  const handleProductClick = (productId) => {
+    router.push(`/product/${productId}`)
+  }
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-[60vh]">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-teal-600"></div>
+      </div>
+    )
+  }
+
+  if (products.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh]">
+        <h2 className="text-2xl font-semibold text-gray-800 mb-4">No products found</h2>
+        <p className="text-gray-600">Try adjusting your filters or search query</p>
+      </div>
+    )
+  }
+
   return (
     <div className="p-1 w-full">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-9">
-
-        <div
-          className="bg-white rounded-lg w-56 overflow-hidden transition-shadow duration-300 cursor-pointer hover:shadow-lg"
-
-        >
-          <div className="h-60 overflow-hidden">
-            <img
-
-              className="w-full h-full object-contain p-1"
-            />
-          </div>
-          <div className="p-2">
-            <h2 className="text-lg font-semibold text-gray-800 mb-2 line-clamp-2">title</h2>
-            <div className="flex justify-between items-center">
-              <span className="text-xl font-bold text-teal-600">$28</span>
+        {products.map((product) => (
+          <div 
+            key={product.id} 
+            className="bg-white rounded-lg w-56 flex flex-col justify-between overflow-hidden transition-shadow duration-300 cursor-pointer hover:shadow-lg"
+            onClick={() => handleProductClick(product.id)}
+          >
+            <div className="h-60 overflow-hidden">
+              <img 
+                src={product.image} 
+                alt={product.title}
+                className="w-full h-full object-contain p-1"
+              />
+            </div>
+            <div className="p-2">
+              <h2 className="text-lg font-semibold text-gray-800 mb-2 line-clamp-2">{product.title}</h2>
+              <div className="flex justify-between items-center">
+                <span className="text-xl font-bold text-teal-600">${product.price}</span>
+              </div>
+            </div>
+            <div className='flex justify-start items-center w-full'>
+              <button 
+                className='bg-teal-600 text-white px-4 py-2 rounded-md cursor-pointer w-full'
+                onClick={(e) => {
+                  e.stopPropagation()
+                }}
+              >
+                Add to Cart
+              </button>
             </div>
           </div>
-          <div className='flex justify-start items-center w-full'>
-            <button
-              className='bg-teal-600 text-white px-4 py-2 rounded-md cursor-pointer w-full'
-              onClick={(e) => {
-                e.stopPropagation()
-              }}
-            >
-              Add to Cart
-            </button>
-          </div>
-        </div>
-
+        ))}
       </div>
     </div>
   )
